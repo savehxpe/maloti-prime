@@ -1,65 +1,179 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useRouter } from "next/navigation";
+import { Diamond, ShieldCheck } from "lucide-react";
+import { useState } from "react";
+
+export default function LandingPage() {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [showForm, setShowForm] = useState(false);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+      {/* Background */}
+      <div className="fixed inset-0 z-0">
+        <div className="absolute inset-0" style={{
+          background: "linear-gradient(135deg, #1a1612 0%, #26201a 40%, #1a1612 70%, rgba(73,57,34,0.3) 100%)",
+        }} />
+        <div className="absolute inset-0" style={{
+          background: "radial-gradient(ellipse at 50% 0%, rgba(244,157,37,0.06) 0%, transparent 60%)"
+        }} />
+      </div>
+
+      {/* Header */}
+      <header className="relative z-10 flex items-center justify-between border-b px-6 py-4 lg:px-12"
+        style={{ borderColor: "rgba(212,175,55,0.1)", background: "rgba(26,22,18,0.5)", backdropFilter: "blur(12px)" }}
+      >
+        <div className="flex items-center gap-3">
+          <div className="size-8 flex items-center justify-center rounded-full border"
+            style={{ background: "rgba(212,175,55,0.1)", borderColor: "rgba(212,175,55,0.2)" }}
+          >
+            <Diamond size={18} style={{ color: "#D4AF37" }} />
+          </div>
+          <h2 className="text-white text-lg font-bold leading-tight tracking-wide uppercase">
+            Maloti Prime
+          </h2>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      </header>
+
+      {/* Main Content */}
+      <main className="relative z-10 flex flex-1 flex-col items-center justify-center px-4 py-12 lg:py-20">
+        <div className="flex flex-col max-w-[640px] w-full items-center text-center animate-fade-in-up">
+          {/* Diamond Icon */}
+          <div className="mb-8 size-24 rounded-full p-[2px] shadow-gold-glow"
+            style={{ background: "linear-gradient(135deg, #D4AF37, #b87315, #D4AF37)" }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+            <div className="flex h-full w-full items-center justify-center rounded-full"
+              style={{ background: "#26201a" }}
+            >
+              <Diamond size={48} style={{ color: "#D4AF37" }} />
+            </div>
+          </div>
+
+          {/* Title */}
+          <h1 className="text-white text-4xl md:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight mb-2 drop-shadow-2xl">
+            <span className="block text-lg md:text-xl font-bold tracking-[0.2em] uppercase mb-4"
+              style={{ color: "#D4AF37" }}
+            >
+              Welcome to
+            </span>
+            Maloti Prime
+          </h1>
+
+          <p className="text-lg md:text-xl font-light tracking-wide mb-8" style={{ color: "#cbd5e1" }}>
+            Lesotho&apos;s First Premium Cannabis Ecosystem
+          </p>
+
+          {/* Age Verification Card */}
+          <div className="relative overflow-hidden border p-8 rounded-xl w-full max-w-lg shadow-2xl mb-10"
+            style={{ background: "rgba(38,32,26,0.8)", borderColor: "rgba(212,175,55,0.1)", backdropFilter: "blur(12px)" }}
+          >
+            <div className="absolute top-0 left-0 w-full h-1"
+              style={{ background: "linear-gradient(to right, transparent, #f49d25, transparent)", opacity: 0.5 }}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+            {!showForm ? (
+              <>
+                <ShieldCheck size={40} className="mx-auto mb-4" style={{ color: "#D4AF37" }} />
+                <h2 className="text-white text-xl md:text-2xl font-bold mb-3">
+                  Age Verification Required
+                </h2>
+                <p className="text-sm md:text-base leading-relaxed mb-6" style={{ color: "#94a3b8" }}>
+                  Access is reserved for adults 21 years or older. By entering, you confirm that you meet the age requirement and agree to our{" "}
+                  <a href="#" className="underline underline-offset-4 transition-colors" style={{ color: "#f49d25" }}>
+                    Terms of Service
+                  </a>{" "}
+                  &amp;{" "}
+                  <a href="#" className="underline underline-offset-4 transition-colors" style={{ color: "#f49d25" }}>
+                    Privacy Policy
+                  </a>.
+                </p>
+              </>
+            ) : (
+              <>
+                <h2 className="text-white text-xl md:text-2xl font-bold mb-3">
+                  Join The Inner Circle
+                </h2>
+                <p className="text-sm mb-6" style={{ color: "#94a3b8" }}>
+                  Get early access, exclusive drops, and member-only pricing.
+                </p>
+                <div className="flex flex-col gap-4 mb-6">
+                  <input
+                    type="text"
+                    placeholder="Your Name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="w-full rounded-lg px-4 py-3 text-white border focus:outline-none focus:ring-1 text-sm"
+                    style={{ background: "rgba(0,0,0,0.3)", borderColor: "rgba(255,255,255,0.1)" }}
+                  />
+                  <input
+                    type="email"
+                    placeholder="Email Address"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full rounded-lg px-4 py-3 text-white border focus:outline-none focus:ring-1 text-sm"
+                    style={{ background: "rgba(0,0,0,0.3)", borderColor: "rgba(255,255,255,0.1)" }}
+                  />
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Buttons */}
+          <div className="flex flex-col items-center gap-6 w-full max-w-sm">
+            {!showForm ? (
+              <button
+                onClick={() => setShowForm(true)}
+                className="w-full cursor-pointer flex items-center justify-center rounded-lg h-14 px-8 text-white text-base font-extrabold tracking-widest uppercase shadow-orange-glow transition-all transform hover:scale-[1.02] focus:outline-none border"
+                style={{ background: "#f49d25", borderColor: "rgba(244,157,37,0.5)" }}
+              >
+                Join The Inner Circle
+              </button>
+            ) : (
+              <button
+                onClick={() => setShowForm(false)}
+                className="w-full cursor-pointer flex items-center justify-center rounded-lg h-14 px-8 text-white text-base font-extrabold tracking-widest uppercase shadow-orange-glow transition-all transform hover:scale-[1.02] focus:outline-none border"
+                style={{ background: "#f49d25", borderColor: "rgba(244,157,37,0.5)" }}
+              >
+                Submit &amp; Join
+              </button>
+            )}
+
+            <button
+              onClick={() => router.push("/home")}
+              className="text-xs font-medium uppercase tracking-[0.15em] transition-colors py-2 border-b hover:opacity-80"
+              style={{ color: "#64748b", borderColor: "transparent" }}
+            >
+              Enter Prototype →
+            </button>
+          </div>
         </div>
       </main>
+
+      {/* Footer */}
+      <footer className="relative z-10 border-t px-6 py-8"
+        style={{ borderColor: "rgba(255,255,255,0.05)", background: "rgba(26,22,18,0.9)", backdropFilter: "blur(16px)" }}
+      >
+        <div className="mx-auto flex max-w-[960px] flex-col gap-6 text-center">
+          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2">
+            {["Privacy Policy", "Terms of Service", "Contact Us", "Locations"].map((link) => (
+              <a
+                key={link}
+                href="#"
+                className="text-xs font-medium uppercase tracking-wider transition-colors hover:opacity-80"
+                style={{ color: "#64748b" }}
+              >
+                {link}
+              </a>
+            ))}
+          </div>
+          <p className="text-xs font-normal" style={{ color: "#475569" }}>
+            © 2025 Maloti Prime. All rights reserved. Use Responsibly.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }

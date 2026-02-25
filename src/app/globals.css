@@ -1,26 +1,85 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primary: #f49d25;
+  --color-primary-dark: #d68310;
+  --color-primary-hover: #e08b1a;
+  --color-accent-gold: #D4AF37;
+  --color-gold-light: #f4e0a4;
+  --color-bg-dark: #1a1612;
+  --color-bg-darker: #110e0a;
+  --color-surface-dark: #26201a;
+  --color-surface-border: #493922;
+  --color-surface-highlight: #3a3024;
+  --color-text-muted: #cbb290;
+
+  --font-display: "Manrope", sans-serif;
+
+  --shadow-gold-glow: 0 0 15px rgba(212, 175, 55, 0.3);
+  --shadow-orange-glow: 0 0 20px rgba(244, 157, 37, 0.4);
+
+  --animate-fade-in-up: fade-in-up 0.6s ease-out both;
+  --animate-pulse-slow: pulse 3s ease-in-out infinite;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #1a1612;
+}
+::-webkit-scrollbar-thumb {
+  background: #493922;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #5a462b;
+}
+
+/* Gold gradient text utility */
+.text-gradient-gold {
+  background: linear-gradient(to right, #d4af37, #f4e0a4, #d4af37);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gold-gradient-text {
+  background: linear-gradient(to right, #f49d25, #ffd080, #f49d25);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Hide scrollbar for tabs */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #1a1612;
+  color: #f1f1f1;
+  font-family: "Manrope", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
