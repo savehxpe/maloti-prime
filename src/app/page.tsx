@@ -2,16 +2,29 @@
 
 import { useRouter } from "next/navigation";
 import { Diamond, ShieldCheck } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import SplashScreen from "@/components/SplashScreen";
 
 export default function LandingPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [showForm, setShowForm] = useState(false);
+  const [showSplash, setShowSplash] = useState(true);
+
+  // Data-catching logic
+  const handleJoin = () => {
+    if (!name || !email) return;
+    // Data-Catching: save to local storage
+    localStorage.setItem("malotiPrimeUser", JSON.stringify({ name, email, joinedAt: new Date().toISOString() }));
+    // Navigate to experience
+    router.push("/home");
+  };
 
   return (
     <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+      {showSplash && <SplashScreen onFinish={() => setShowSplash(false)} />}
+
       {/* Background */}
       <div className="fixed inset-0 z-0">
         <div className="absolute inset-0" style={{

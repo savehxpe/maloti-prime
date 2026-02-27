@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Truck, ShoppingCart, Diamond, ArrowRight } from "lucide-react";
+import ProductCard from "@/components/ProductCard";
 
 export const metadata: Metadata = {
     title: "Home — Maloti Prime",
@@ -14,10 +15,37 @@ const collections = [
 ];
 
 const products = [
-    { name: "Royal Swazi Gold", price: "M250", desc: "Energizing • Citrus • 24% THC", badge: "Sativa", badgeColor: "#f49d25" },
-    { name: "Maluti Mountain Mist", price: "M320", desc: "Relaxing • Pine • 18% THC", badge: "Indica", badgeColor: "#8b5cf6" },
-    { name: "Highland Pre-Rolls", price: "M180", desc: "Balanced • Earthy • 5 Pack", badge: "Hybrid", badgeColor: "#16a34a" },
-    { name: "Basotho Berry Gummies", price: "M200", desc: "Euphoric • Sweet • 100mg Total", badge: "Hybrid", badgeColor: "#16a34a" },
+    {
+        id: "std-001",
+        name: "Latu Mountain Gold",
+        tier: "Standard",
+        price: 100,
+        type: "Sativa",
+        description: "The Kingdom's dependable favorite. Clean, sun-grown local excellence.",
+        badge: "Local Pride",
+        image: "/images/strain_gold_1772159000704.png"
+    },
+    {
+        id: "pre-002",
+        name: "Orange Maloti Frost",
+        tier: "Premium",
+        price: 140,
+        type: "Hybrid",
+        description: "Elevated greenhouse quality. Intense citrus notes with a smooth Maloti finish.",
+        badge: "Premium Grade",
+        image: "/images/strain_purple_1772159018919.png"
+    },
+    {
+        id: "res-003",
+        name: "Outworld Reserve",
+        tier: "Reserve",
+        price: 180,
+        type: "Indica",
+        description: "Elite indoor cultivation. Our highest THC profile, reserved for the inner circle.",
+        badge: "Kingdom's Reserve",
+        locked: true,
+        image: "/images/prerolls_1772159036041.png"
+    }
 ];
 
 export default function HomePage() {
@@ -114,40 +142,19 @@ export default function HomePage() {
                     Curated For You
                 </h2>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {products.map((product) => (
-                        <div
-                            key={product.name}
-                            className="rounded-xl p-4 flex flex-col gap-4 border transition-colors group hover:opacity-90"
-                            style={{ background: "#26201a", borderColor: "#493922" }}
-                        >
-                            <div className="relative rounded-lg overflow-hidden"
-                                style={{ aspectRatio: "1/1", background: "rgba(0,0,0,0.3)" }}
-                            >
-                                <div className="w-full h-full flex items-center justify-center group-hover:scale-105 transition-transform duration-500"
-                                    style={{ background: "linear-gradient(135deg, #26201a, #1a1612)" }}
-                                >
-                                    <span className="text-5xl opacity-15">🌿</span>
-                                </div>
-                                <div className="absolute top-3 left-3 text-xs font-bold px-2 py-1 rounded"
-                                    style={{ background: product.badgeColor, color: product.badgeColor === "#f49d25" ? "#1a1612" : "#fff" }}
-                                >
-                                    {product.badge}
-                                </div>
-                                <button className="absolute bottom-3 right-3 size-10 rounded-full shadow-lg flex items-center justify-center translate-y-12 group-hover:translate-y-0 transition-transform duration-300"
-                                    style={{ background: "#1a1612", color: "#f49d25" }}
-                                >
-                                    <ShoppingCart size={18} />
-                                </button>
-                            </div>
-                            <div className="flex flex-col gap-1">
-                                <div className="flex justify-between items-start">
-                                    <h3 className="text-white font-bold text-lg">{product.name}</h3>
-                                    <p className="font-bold" style={{ color: "#f49d25" }}>{product.price}</p>
-                                </div>
-                                <p className="text-sm" style={{ color: "#94a3b8" }}>{product.desc}</p>
-                            </div>
-                        </div>
+                        <ProductCard
+                            key={product.id}
+                            name={product.name}
+                            type={product.type}
+                            description={product.description}
+                            price={product.price}
+                            badge={product.badge}
+                            image={product.image}
+                            tier={product.tier}
+                            locked={product.locked}
+                        />
                     ))}
                 </div>
             </div>

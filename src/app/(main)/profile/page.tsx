@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Diamond, Settings, CreditCard, MapPin, Bell, LogOut, ChevronRight } from "lucide-react";
+import DeliveryTracker from "@/components/DeliveryTracker";
 
 export const metadata: Metadata = {
     title: "Profile — Maloti Prime",
@@ -15,7 +16,7 @@ const menuItems = [
 
 export default function ProfilePage() {
     return (
-        <main className="flex-1 flex justify-center py-8 px-4 lg:px-12" style={{ background: "#1a1612" }}>
+        <main className="flex-1 flex justify-center py-8 px-4 lg:px-12" style={{ background: "#0a0806" }}>
             <div className="flex flex-col w-full max-w-[640px] gap-8">
                 {/* Profile Header */}
                 <div className="flex flex-col items-center gap-4 pt-8">
@@ -23,7 +24,7 @@ export default function ProfilePage() {
                         style={{ background: "linear-gradient(135deg, #f49d25, #D4AF37)" }}
                     >
                         <div className="flex h-full w-full items-center justify-center rounded-full"
-                            style={{ background: "#26201a" }}
+                            style={{ background: "#1a1612" }}
                         >
                             <Diamond size={36} style={{ color: "#D4AF37" }} />
                         </div>
@@ -45,6 +46,11 @@ export default function ProfilePage() {
                     </div>
                 </div>
 
+                {/* Delivery Tracker */}
+                <div className="mt-2">
+                    <DeliveryTracker />
+                </div>
+
                 {/* Stats */}
                 <div className="grid grid-cols-3 gap-4">
                     {[
@@ -52,8 +58,8 @@ export default function ProfilePage() {
                         { value: "M3,200", label: "Total Spent" },
                         { value: "4.9★", label: "Rating" },
                     ].map((stat) => (
-                        <div key={stat.label} className="flex flex-col items-center p-4 rounded-xl border"
-                            style={{ background: "#26201a", borderColor: "#493922" }}
+                        <div key={stat.label} className="flex flex-col items-center p-4 rounded-xl border border-[#493922]/30"
+                            style={{ background: "#1a1612" }}
                         >
                             <span className="text-xl font-bold" style={{ color: "#f49d25" }}>{stat.value}</span>
                             <span className="text-xs mt-1" style={{ color: "#cbb290" }}>{stat.label}</span>
