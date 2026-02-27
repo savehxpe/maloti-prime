@@ -32,6 +32,7 @@ export const metadata: Metadata = {
 };
 
 import { MalotiProvider } from "@/context/MalotiContext";
+import GlobalModals from "@/components/GlobalModals";
 
 export default function RootLayout({
   children,
@@ -39,10 +40,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${manrope.variable} font-display`}>
+    <html lang="en">
+      <body
+        className={`${manrope.variable} font-display antialiased selection:bg-[#f49d25] selection:text-black`}
+      >
         <MalotiProvider>
           {children}
+          <GlobalModals />
         </MalotiProvider>
       </body>
     </html>
