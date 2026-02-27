@@ -102,7 +102,7 @@ export default function ProductCard({
                         whileHover={!isReserve ? { scale: 1.05, filter: "brightness(1.15)" } : undefined}
                         transition={{ duration: 0.5 }}
                     >
-                        {isReserve ? (
+                        {isReserve && !image ? (
                             <div className="w-full h-full absolute inset-0 z-10 flex items-center justify-center pt-8">
                                 <OutworldRenderer tier={tier} />
                             </div>
