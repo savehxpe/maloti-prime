@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Diamond, Settings, CreditCard, MapPin, Bell, LogOut, ChevronRight } from "lucide-react";
+import { Diamond, Shield, Truck, Sparkles, HelpCircle, LogOut, ChevronRight } from "lucide-react";
 import DeliveryTracker from "@/components/DeliveryTracker";
 
 export const metadata: Metadata = {
@@ -8,10 +8,10 @@ export const metadata: Metadata = {
 };
 
 const menuItems = [
-    { icon: CreditCard, label: "Payment Methods", desc: "Manage your cards" },
-    { icon: MapPin, label: "Delivery Addresses", desc: "Maseru, Lesotho" },
-    { icon: Bell, label: "Notifications", desc: "Exclusive drops & offers" },
-    { icon: Settings, label: "Settings", desc: "Account preferences" },
+    { icon: Shield, label: "Account Security", desc: "Manage authentication & privacy" },
+    { icon: Truck, label: "Delivery Preferences", desc: "Maseru residential & business drops" },
+    { icon: Sparkles, label: "Inner Circle Membership", desc: "Elite tier rewards & tracking" },
+    { icon: HelpCircle, label: "Help/Support", desc: "24/7 Concierge & MP hotline" },
 ];
 
 export default function ProfilePage() {
@@ -67,24 +67,33 @@ export default function ProfilePage() {
                     ))}
                 </div>
 
-                {/* Menu Items */}
-                <div className="flex flex-col gap-2">
+                {/* Menu Items (Glassmorphic Settings) */}
+                <div className="flex flex-col gap-3 mt-4">
                     {menuItems.map((item) => {
                         const Icon = item.icon;
                         return (
                             <button
                                 key={item.label}
-                                className="flex items-center gap-4 p-4 rounded-xl border transition-colors hover:opacity-80 w-full text-left"
-                                style={{ background: "#26201a", borderColor: "#493922" }}
+                                className="flex items-center gap-5 p-5 rounded-2xl border transition-all hover:scale-[1.01] active:scale-[0.99] w-full text-left"
+                                style={{
+                                    background: "rgba(38, 32, 26, 0.4)", // Charcoal background
+                                    borderColor: "rgba(229, 229, 229, 0.1)", // Subtle chrome border
+                                    backdropFilter: "blur(20px)",
+                                    boxShadow: "0 8px 32px 0 rgba(0, 0, 0, 0.3)"
+                                }}
                             >
-                                <div className="p-2.5 rounded-lg" style={{ background: "rgba(244,157,37,0.1)", color: "#f49d25" }}>
-                                    <Icon size={20} />
+                                <div className="p-3 rounded-xl border" style={{
+                                    background: "rgba(229, 229, 229, 0.05)",
+                                    borderColor: "rgba(229, 229, 229, 0.1)",
+                                    color: "#E5E5E5" // Chrome icons
+                                }}>
+                                    <Icon size={22} strokeWidth={1.5} />
                                 </div>
                                 <div className="flex-1">
-                                    <h3 className="text-white font-medium">{item.label}</h3>
-                                    <p className="text-xs" style={{ color: "#cbb290" }}>{item.desc}</p>
+                                    <h3 className="text-[#E5E5E5] font-bold tracking-wide">{item.label}</h3>
+                                    <p className="text-xs mt-0.5" style={{ color: "#94a3b8" }}>{item.desc}</p>
                                 </div>
-                                <ChevronRight size={18} style={{ color: "#493922" }} />
+                                <ChevronRight size={18} style={{ color: "rgba(229, 229, 229, 0.3)" }} />
                             </button>
                         );
                     })}

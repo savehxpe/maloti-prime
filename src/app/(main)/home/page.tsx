@@ -8,16 +8,16 @@ export const metadata: Metadata = {
 };
 
 const collections = [
-    { label: "Maloti Reserve", title: "Top Shelf", gradient: "linear-gradient(135deg, #064e3b, #065f46)" },
-    { label: "Exquisite Taste", title: "New Arrivals", gradient: "linear-gradient(135deg, #78350f, #92400e)" },
-    { label: "Gourmet", title: "Edibles", gradient: "linear-gradient(135deg, #4c1d95, #5b21b6)" },
-    { label: "Potent Extracts", title: "Concentrates", gradient: "linear-gradient(135deg, #134e4a, #115e59)" },
+    { label: "Maloti Reserve", title: "Top Shelf", gradient: "linear-gradient(135deg, #064e3b, #065f46)", image: "/images/collection_reserve.png", auraColor: "rgba(244,157,37,0.4)" },
+    { label: "Exquisite Taste", title: "New Arrivals", gradient: "linear-gradient(135deg, #78350f, #92400e)", image: "/images/collection_exquisite.png", auraColor: "rgba(229,229,225,0.2)" },
+    { label: "Gourmet Edibles", title: "Infusions", gradient: "linear-gradient(135deg, #4c1d95, #5b21b6)", image: "/images/collection_gourmet.png", auraColor: "rgba(255,140,0,0.3)" },
+    { label: "Potent Extracts", title: "Concentrates", gradient: "linear-gradient(135deg, #134e4a, #115e59)", image: "/images/collection_extracts.png", auraColor: "rgba(0,255,255,0.3)" },
 ];
 
 const products = [
     {
         id: "std-001",
-        name: "Latu Mountain Gold",
+        name: "Mountain Gold",
         tier: "Standard",
         price: 100,
         type: "Sativa",
@@ -44,7 +44,7 @@ const products = [
         description: "Elite indoor cultivation. Our highest THC profile, reserved for the inner circle.",
         badge: "Kingdom's Reserve",
         locked: true,
-        image: "/images/prerolls_1772159036041.png"
+        image: "/images/product_outworld_reserve.png"
     }
 ];
 
@@ -101,7 +101,7 @@ export default function HomePage() {
                     <h2 className="text-white text-2xl lg:text-3xl font-bold leading-tight tracking-tight">
                         Featured Collections
                     </h2>
-                    <a href="#" className="font-bold text-sm flex items-center gap-1" style={{ color: "#f49d25" }}>
+                    <a href="/collections" className="font-bold text-sm flex items-center gap-1" style={{ color: "#f49d25" }}>
                         View All <ArrowRight size={14} />
                     </a>
                 </div>
@@ -109,23 +109,27 @@ export default function HomePage() {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
                     {collections.map((col) => (
                         <a
-                            key={col.title}
-                            href="#"
-                            className="group relative rounded-xl overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl"
-                            style={{ aspectRatio: "4/5" }}
+                            key={col.label}
+                            href="/collections"
+                            className="group relative rounded-xl overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl border"
+                            style={{ aspectRatio: "4/5", borderColor: "rgba(255,255,255,0.05)" }}
                         >
                             <div
-                                className="absolute inset-0 transition-transform duration-700 group-hover:scale-110"
-                                style={{ background: col.gradient }}
+                                className="absolute inset-0 transition-transform duration-700 group-hover:scale-110 bg-cover bg-center"
+                                style={{ backgroundImage: `url(${col.image})` }}
                             >
-                                <div className="absolute inset-0 flex items-center justify-center">
-                                    <span className="text-7xl opacity-10">🌿</span>
-                                </div>
+                                <div className="absolute inset-0 bg-black/20" />
+                                <div className="absolute inset-0"
+                                    style={{
+                                        background: `radial-gradient(circle at center, ${col.auraColor || 'transparent'} 0%, transparent 70%)`,
+                                        opacity: 0.6
+                                    }}
+                                />
                             </div>
-                            <div className="absolute inset-0 opacity-80 group-hover:opacity-70 transition-opacity"
+                            <div className="absolute inset-0 opacity-80 group-hover:opacity-60 transition-opacity"
                                 style={{ background: "linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.2), transparent)" }}
                             />
-                            <div className="absolute bottom-0 left-0 right-0 p-5 flex flex-col gap-1">
+                            <div className="absolute bottom-0 left-0 right-0 p-5 flex flex-col gap-1 z-10">
                                 <span className="text-xs font-bold uppercase tracking-wider" style={{ color: "#f49d25" }}>
                                     {col.label}
                                 </span>
