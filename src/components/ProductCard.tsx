@@ -1,10 +1,11 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { Heart, Plus, Lock, X } from "lucide-react";
+import { Heart, Plus, Lock, X, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
 import OutworldRenderer from "./OutworldRenderer";
+import { useMaloti } from "@/context/MalotiContext";
 
 interface ProductCardProps {
     name: string;
@@ -27,23 +28,35 @@ export default function ProductCard({
     tier,
     locked = false
 }: ProductCardProps) {
-    const [showModal, setShowModal] = useState(false);
+    const { pingCart, innerCircleOpen, setInnerCircleOpen } = useMaloti();
+    const [isAdding, setIsAdding] = useState(false);
 
     const isReserve = tier === "Reserve";
     const isPremium = tier === "Premium";
     const isStandard = tier === "Standard";
 
     let borderColor = "rgba(73, 57, 34, 0.3)";
-    if (isStandard) borderColor = "rgba(229, 229, 229, 0.5)"; // Chrome wireframe
-    if (isPremium) borderColor = "#f49d25"; // Orange Border
-    if (isReserve) borderColor = "#D4AF37"; // Gold for Reserve
+    if (isStandard) borderColor = "rgba(229, 229, 229, 0.5)";
+    if (isPremium) borderColor = "#f49d25";
+    if (isReserve) borderColor = "#D4AF37";
 
     const handleInteraction = (e: React.MouseEvent) => {
         if (isReserve || locked) {
             e.preventDefault();
             e.stopPropagation();
-            setShowModal(true);
+            setInnerCircleOpen(true);
         }
+    };
+
+    const handleAddToCart = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (locked || isReserve) {
+            setInnerCircleOpen(true);
+            return;
+        }
+        setIsAdding(true);
+        pingCart();
+        setTimeout(() => setIsAdding(false), 600);
     };
 
     return (
@@ -51,7 +64,7 @@ export default function ProductCard({
             <motion.div
                 className="group flex flex-col cursor-pointer relative"
                 whileHover={{ y: -5 }}
-                whileTap={{ scale: 0.98 }}
+                whileTap={{ scale: 0.98 }} // MP-PHYS-01 (Tactile Feel)
                 transition={{ duration: 0.3, ease: "easeOut" }}
                 onClick={handleInteraction}
             >
@@ -120,14 +133,18 @@ export default function ProductCard({
                         {!isReserve && <div className="absolute inset-0 z-10 bg-[linear-gradient(to_bottom,transparent_40%,rgba(0,0,0,0.9)_100%)] pointer-events-none" />}
                     </motion.div>
 
-                    {/* Hover action */}
+                    {/* Add to Cart Pulse Interaction */}
                     <div className="absolute inset-x-0 bottom-4 px-4 z-20 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0">
-                        <button className="w-full flex justify-center items-center gap-2 text-[#1a1612] font-black text-xs py-3.5 px-4 uppercase tracking-widest transition-transform shadow-[0_0_15px_rgba(244,157,37,0.5)] rounded-lg hover:scale-[1.02]"
-                            style={{ background: "#f49d25" }}
+                        <motion.button
+                            className="w-full flex justify-center items-center gap-2 text-[#1a1612] font-black text-xs py-3.5 px-4 uppercase tracking-widest shadow-lg rounded-lg"
+                            style={{ background: isAdding ? "#FF8C00" : "#f49d25" }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={handleAddToCart}
+                            animate={isAdding ? { scale: [1, 1.05, 1], boxShadow: "0 0 20px rgba(255,140,0,0.8)" } : {}}
                         >
                             {locked ? <Lock size={16} strokeWidth={3} /> : <Plus size={16} strokeWidth={3} />}
-                            {locked ? "UNLOCK" : "ADD TO CART"}
-                        </button>
+                            {isAdding ? "SUCCESS" : (locked || isReserve) ? "VERIFY ACCESS" : "ADD TO CART"}
+                        </motion.button>
                     </div>
                 </motion.div>
 
@@ -150,63 +167,64 @@ export default function ProductCard({
                 </div>
             </motion.div>
 
-            {/* Modal for Access */}
+            {/* Inner Circle Modal */}
             <AnimatePresence>
-                {showModal && (
-                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                {innerCircleOpen && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
                         <motion.div
-                            className="absolute inset-0 bg-black/80 backdrop-blur-md"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            onClick={(e) => { e.stopPropagation(); setShowModal(false); }}
+                            className="absolute inset-0 bg-black/80 backdrop-blur-xl"
+                            onClick={() => setInnerCircleOpen(false)}
                         />
                         <motion.div
-                            className="relative z-10 w-full max-w-sm rounded-[24px] border p-8 flex flex-col items-center text-center shadow-[0_0_50px_rgba(212,175,55,0.15)]"
-                            style={{ background: "#0a0806", borderColor: "#D4AF37" }}
-                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                            onClick={(e) => e.stopPropagation()}
+                            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                            className="relative w-full max-w-lg bg-[#1a1612] border-2 border-[#FF8C00] rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(255,140,0,0.3)]"
                         >
+                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#FF8C00] to-transparent animate-pulse" />
+
+                            <div className="p-8 flex flex-col items-center text-center">
+                                <div className="size-16 bg-[#26201a] border border-[#FF8C00]/30 rounded-full flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(255,140,0,0.2)]">
+                                    <ShieldCheck size={32} className="text-[#FF8C00]" />
+                                </div>
+
+                                <h2 className="text-2xl font-black text-white uppercase tracking-[0.2em] mb-2">Inner Circle Exclusive</h2>
+                                <p className="text-[#cbb290] text-sm mb-8 max-w-xs uppercase tracking-widest opacity-80">
+                                    This asset requires a level 3 clearance or a "Member Key" sync.
+                                </p>
+
+                                <div className="w-full space-y-4">
+                                    <div className="relative">
+                                        <input
+                                            type="text"
+                                            placeholder="ENTER MEMBER KEY"
+                                            className="w-full bg-black/40 border border-[#FF8C00]/20 rounded-lg py-4 px-4 text-center text-white placeholder:text-white/20 focus:outline-none focus:border-[#FF8C00] tracking-[0.5em] font-bold text-sm"
+                                        />
+                                    </div>
+                                    <button
+                                        className="w-full bg-[#FF8C00] text-black font-black uppercase py-4 rounded-lg tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-lg"
+                                        onClick={() => setInnerCircleOpen(false)}
+                                    >
+                                        IDENTITY SYNC
+                                    </button>
+                                </div>
+
+                                <button
+                                    className="mt-8 text-[10px] text-[#cbb290] uppercase tracking-widest hover:text-white transition-colors"
+                                    onClick={() => setInnerCircleOpen(false)}
+                                >
+                                    [ Request Access Key ]
+                                </button>
+                            </div>
+
                             <button
-                                className="absolute top-5 right-5 text-white/40 hover:text-white transition-colors bg-black/50 p-2 rounded-full"
-                                onClick={(e) => { e.stopPropagation(); setShowModal(false); }}
+                                className="absolute top-4 right-4 text-white/40 hover:text-white transition-colors"
+                                onClick={() => setInnerCircleOpen(false)}
                             >
-                                <X size={18} />
-                            </button>
-
-                            <div className="w-20 h-20 rounded-full flex items-center justify-center mb-6 border border-[#D4AF37]/40 shadow-[0_0_30px_rgba(212,175,55,0.2)]"
-                                style={{ background: "radial-gradient(circle, rgba(212,175,55,0.15) 0%, transparent 70%)" }}
-                            >
-                                <Lock size={32} style={{ color: "#D4AF37" }} />
-                            </div>
-
-                            <h2 className="text-2xl font-bold uppercase tracking-widest mb-3" style={{ color: "#D4AF37" }}>
-                                Verify Access
-                            </h2>
-                            <p className="text-sm mb-8 leading-relaxed px-2" style={{ color: "#cbb290" }}>
-                                Please verify your credentials to unlock the <span style={{ color: "#f49d25" }}>Kingdom&apos;s Reserve</span> tier.
-                            </p>
-
-                            <div className="w-full flex flex-col gap-3 mb-8">
-                                <input
-                                    type="text"
-                                    placeholder="Reserve ID / Username"
-                                    className="w-full bg-[#1a1612] border border-[#493922] rounded-xl px-4 py-4 text-white text-sm focus:outline-none focus:border-[#D4AF37] transition-colors placeholder:text-[#493922]"
-                                />
-                                <input
-                                    type="password"
-                                    placeholder="Passcode"
-                                    className="w-full bg-[#1a1612] border border-[#493922] rounded-xl px-4 py-4 text-white text-sm focus:outline-none focus:border-[#D4AF37] transition-colors placeholder:text-[#493922]"
-                                />
-                            </div>
-
-                            <button className="w-full py-4 rounded-xl font-bold text-sm uppercase tracking-widest text-[#0a0806] transition-all hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(244,157,37,0.4)]"
-                                style={{ background: "linear-gradient(90deg, #D4AF37, #f49d25)" }}
-                                onClick={(e) => { e.stopPropagation(); setShowModal(false); }}
-                            >
-                                Unlock Protocol
+                                <X size={20} />
                             </button>
                         </motion.div>
                     </div>

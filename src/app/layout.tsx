@@ -31,6 +31,8 @@ export const metadata: Metadata = {
   robots: "index, follow",
 };
 
+import { MalotiProvider } from "@/context/MalotiContext";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -39,7 +41,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${manrope.variable} font-display`}>
-        {children}
+        <MalotiProvider>
+          {children}
+        </MalotiProvider>
       </body>
     </html>
   );
