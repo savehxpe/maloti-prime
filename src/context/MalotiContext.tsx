@@ -35,7 +35,7 @@ export function MalotiProvider({ children }: { children: React.ReactNode }) {
         // Safe dynamic import to allow SSR
         const initAuth = async () => {
             const { auth } = await import("@/lib/firebase");
-            onAuthStateChanged(auth, (usr) => {
+            onAuthStateChanged(auth, (usr: any) => {
                 setUser(usr);
             });
         }

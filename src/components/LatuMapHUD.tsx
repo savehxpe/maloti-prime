@@ -84,7 +84,7 @@ export default function LatuMapHUD() {
                 const { collection, onSnapshot, query, orderBy, limit } = await import("firebase/firestore");
                 const q = query(collection(db, "shipments"), orderBy("createdAt", "desc"), limit(1));
 
-                unsubscribe = onSnapshot(q, (snapshot) => {
+                unsubscribe = onSnapshot(q, (snapshot: any) => {
                     if (!snapshot.empty) {
                         const newEvent = snapshot.docs[0].data();
                         setStatus(newEvent.status || "New Shipment Detected");
