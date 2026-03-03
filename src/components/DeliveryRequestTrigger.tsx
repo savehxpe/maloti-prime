@@ -8,7 +8,7 @@ import { useMaloti } from '@/context/MalotiContext';
 const DeliveryRequestTrigger = () => {
     const [isOpen, setIsOpen] = useState(false);
 
-    const { cart } = useMaloti();
+    const { cart, user } = useMaloti();
     const [loading, setLoading] = useState(false);
 
     const handleCheckout = async () => {
@@ -24,7 +24,7 @@ const DeliveryRequestTrigger = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     items: cart,
-                    memberId: 'anon' // This can be extracted from user state
+                    memberId: user?.uid || 'anon'
                 })
             });
 

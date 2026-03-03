@@ -3,9 +3,10 @@
 import React, { useRef, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Float, MeshDistortMaterial, Stage, PerspectiveCamera } from '@react-three/drei';
+import { Mesh } from 'three';
 
-const ProductModel = ({ color = "#FF8C00" }) => {
-    const meshRef = useRef();
+const ProductModel = ({ color = "#FF8C00" }: { color?: string }) => {
+    const meshRef = useRef<Mesh>(null!);
 
     // Rotation logic - The "Boutique Engine" rotation (0.5 RPM)
     useFrame((state) => {
@@ -34,7 +35,7 @@ const ProductModel = ({ color = "#FF8C00" }) => {
     );
 };
 
-const OutworldRenderer = ({ tier = "Reserve" }) => {
+const OutworldRenderer = ({ tier = "Reserve" }: { tier?: string }) => {
     // Map color to Tier based on Protocol R100-R180
     const tierColor = tier === "Reserve" ? "#FF8C00" : tier === "Premium" ? "#00FFFF" : "#E5E5E5";
 
@@ -49,7 +50,7 @@ const OutworldRenderer = ({ tier = "Reserve" }) => {
                 <spotLight position={[-10, 10, 10]} angle={0.15} penumbra={1} color="#00FFFF" intensity={2} /> {/* Cyber Cyan Rim */}
 
                 <Suspense fallback={null}>
-                    <Stage environment="city" intensity={0.5} contactShadow={false}>
+                    <Stage environment="city" intensity={0.5} shadows={false}>
                         <ProductModel color={tierColor} />
                     </Stage>
                 </Suspense>

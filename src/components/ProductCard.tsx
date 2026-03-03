@@ -28,7 +28,7 @@ export default function ProductCard({
     tier,
     locked = false
 }: ProductCardProps) {
-    const { addToCart, innerCircleOpen, setInnerCircleOpen } = useMaloti();
+    const { addToCart, innerCircleOpen, setInnerCircleOpen, user } = useMaloti();
     const [isAdding, setIsAdding] = useState(false);
 
     const isReserve = tier === "Reserve";
@@ -40,8 +40,11 @@ export default function ProductCard({
     if (isPremium) borderColor = "#f49d25";
     if (isReserve) borderColor = "#D4AF37";
 
+    const userHasAccess = !!user;
+    const requiresVerification = (isReserve && !userHasAccess) || locked;
+
     const handleInteraction = (e: React.MouseEvent) => {
-        if (isReserve || locked) {
+        if (requiresVerification) {
             e.preventDefault();
             e.stopPropagation();
             setInnerCircleOpen(true);
@@ -50,7 +53,7 @@ export default function ProductCard({
 
     const handleAddToCart = (e: React.MouseEvent) => {
         e.stopPropagation();
-        if (locked || isReserve) {
+        if (requiresVerification) {
             setInnerCircleOpen(true);
             return;
         }
@@ -142,8 +145,8 @@ export default function ProductCard({
                             onClick={handleAddToCart}
                             animate={isAdding ? { scale: [1, 1.05, 1], boxShadow: "0 0 20px rgba(255,140,0,0.8)" } : {}}
                         >
-                            {locked ? <Lock size={16} strokeWidth={3} /> : <Plus size={16} strokeWidth={3} />}
-                            {isAdding ? "SUCCESS" : (locked || isReserve) ? "VERIFY ACCESS" : "ADD TO CART"}
+                            {requiresVerification ? <Lock size={16} strokeWidth={3} /> : <Plus size={16} strokeWidth={3} />}
+                            {isAdding ? "SUCCESS" : requiresVerification ? "VERIFY ACCESS" : "ADD TO CART"}
                         </motion.button>
                     </div>
                 </motion.div>

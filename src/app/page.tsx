@@ -155,11 +155,32 @@ export default function LandingPage() {
             )}
 
             <button
-              onClick={() => router.push("/home")}
-              className="text-xs font-medium uppercase tracking-[0.15em] transition-colors py-2 border-b hover:opacity-80"
-              style={{ color: "#64748b", borderColor: "transparent" }}
+              onClick={async () => {
+                try {
+                  const { auth, db } = await import("@/lib/firebase");
+                  const { signInWithPopup, GoogleAuthProvider } = await import("firebase/auth");
+                  const { doc, setDoc } = await import("firebase/firestore");
+
+                  const cred = await signInWithPopup(auth, new GoogleAuthProvider());
+                  const user = cred.user;
+
+                  await setDoc(doc(db, "users", user.uid), {
+                    email: user.email,
+                    displayName: user.displayName,
+                    memberStatus: "Inner Circle",
+                    lastLoginAt: new Date().toISOString()
+                  }, { merge: true });
+
+                  router.push("/home");
+                } catch (error) {
+                  console.error("Google Sign-In Error", error);
+                }
+              }}
+              className="w-full cursor-pointer flex items-center justify-center gap-3 rounded-lg h-14 px-8 text-white text-base font-extrabold tracking-widest uppercase transition-all transform hover:scale-[1.02] focus:outline-none border hover:bg-white/10"
+              style={{ background: "rgba(0,0,0,0.4)", borderColor: "#E5E5E5" }}
             >
-              Enter Prototype →
+              <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" className="w-5 h-5 bg-white rounded-full p-0.5" />
+              Sign in with Google
             </button>
           </div>
         </div>
