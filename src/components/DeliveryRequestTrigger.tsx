@@ -3,9 +3,44 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import LatuMapHUD from './LatuMapHUD'; // 3D Map Component
+import { useMaloti } from '@/context/MalotiContext';
 
 const DeliveryRequestTrigger = () => {
     const [isOpen, setIsOpen] = useState(false);
+
+    const { cart } = useMaloti();
+    const [loading, setLoading] = useState(false);
+
+    const handleCheckout = async () => {
+        if (cart.length === 0) {
+            setIsOpen(true);
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const res = await fetch('/api/checkout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    items: cart,
+                    memberId: 'anon' // This can be extracted from user state
+                })
+            });
+
+            const data = await res.json();
+            if (data.url) {
+                window.location.href = data.url;
+            } else {
+                setIsOpen(true);
+            }
+        } catch (error) {
+            console.error(error);
+            setIsOpen(true);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div className="relative z-50">
@@ -13,10 +48,11 @@ const DeliveryRequestTrigger = () => {
             <motion.button
                 whileTap={{ scale: 0.95 }}
                 whileHover={{ scale: 1.05, boxShadow: "0px 0px 20px rgba(255,140,0,0.4)" }}
-                onClick={() => setIsOpen(true)}
+                onClick={handleCheckout}
+                disabled={loading}
                 className="bg-[#FF8C00] text-black px-8 py-4 rounded-full font-bold uppercase tracking-[0.2em] text-xs shadow-lg transition-transform"
             >
-                Request Delivery
+                {loading ? "Processing Payment..." : (cart.length > 0 ? `Checkout (${cart.length})` : "Request Delivery")}
             </motion.button>
 
             {/* The 3D Map Expansion Overlay */}

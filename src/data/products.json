@@ -1,0 +1,50 @@
+[
+    {
+        "id": "p_100",
+        "name": "Maloti Gold",
+        "tier": "Standard",
+        "price": 100,
+        "type": "Sativa",
+        "image": "/images/strain_maloti_gold.png"
+    },
+    {
+        "id": "p_140",
+        "name": "Mahase",
+        "tier": "Premium",
+        "price": 140,
+        "type": "Hybrid",
+        "image": "/images/strain_mahase.png"
+    },
+    {
+        "id": "p_180",
+        "name": "Highland Kush",
+        "tier": "Reserve",
+        "price": 180,
+        "type": "Indica",
+        "image": "/images/strain_highland_kush.png"
+    },
+    {
+        "id": "p_150",
+        "name": "Moberry",
+        "tier": "Premium",
+        "price": 150,
+        "type": "Hybrid",
+        "image": "/images/strain_moberry.png"
+    },
+    {
+        "id": "p_200",
+        "name": "Outworld Reserve",
+        "tier": "Reserve",
+        "price": 200,
+        "type": "Indica",
+        "image": "/images/product_outworld_reserve.png"
+    },
+    {
+        "id": "p_101",
+        "name": "Maseru Midnight",
+        "tier": "Standard",
+        "price": 100,
+        "type": "Indica",
+        "image": "/images/strain_purple_1772159018919.png"
+    }
+]

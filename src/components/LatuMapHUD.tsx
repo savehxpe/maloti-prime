@@ -72,16 +72,51 @@ const MovingFleetUnit = () => {
 };
 
 export default function LatuMapHUD() {
+    const [status, setStatus] = React.useState("Awaiting Fleet Sync...");
+    const [hasShipment, setHasShipment] = React.useState(false);
+
+    React.useEffect(() => {
+        // Safe dynamic import to allow SSR
+        let unsubscribe = () => { };
+        const initFirebase = async () => {
+            try {
+                const { db } = await import("@/lib/firebase");
+                const { collection, onSnapshot, query, orderBy, limit } = await import("firebase/firestore");
+                const q = query(collection(db, "shipments"), orderBy("createdAt", "desc"), limit(1));
+
+                unsubscribe = onSnapshot(q, (snapshot) => {
+                    if (!snapshot.empty) {
+                        const newEvent = snapshot.docs[0].data();
+                        setStatus(newEvent.status || "New Shipment Detected");
+                        setHasShipment(true);
+                        setTimeout(() => setHasShipment(false), 5000); // Ping for 5s
+                    }
+                });
+            } catch (error) {
+                console.error("Firestore listener error", error);
+            }
+        };
+
+        if (typeof window !== "undefined") {
+            initFirebase();
+        }
+
+        return () => unsubscribe();
+    }, []);
+
     return (
-        <div className="w-full h-full bg-black">
+        <div className="w-full h-full bg-black relative">
             <Canvas>
                 <PerspectiveCamera makeDefault position={[5, 5, 5]} />
-                <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.5} />
+                <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={hasShipment ? 2.0 : 0.5} />
                 <ambientLight intensity={0.2} />
                 <pointLight position={[10, 10, 10]} intensity={1} />
                 <MaseruGrid />
                 <fog attach="fog" args={['#000', 5, 15]} />
             </Canvas>
+            <div className="absolute top-4 right-4 bg-black/50 p-2 text-xs text-[#00FFFF] border border-[#00FFFF]/30">
+                {status}
+            </div>
         </div>
     );
 }

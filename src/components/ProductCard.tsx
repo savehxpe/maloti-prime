@@ -28,7 +28,7 @@ export default function ProductCard({
     tier,
     locked = false
 }: ProductCardProps) {
-    const { pingCart, innerCircleOpen, setInnerCircleOpen } = useMaloti();
+    const { addToCart, innerCircleOpen, setInnerCircleOpen } = useMaloti();
     const [isAdding, setIsAdding] = useState(false);
 
     const isReserve = tier === "Reserve";
@@ -55,7 +55,7 @@ export default function ProductCard({
             return;
         }
         setIsAdding(true);
-        pingCart();
+        addToCart({ name, type, price, image, tier });
         setTimeout(() => setIsAdding(false), 600);
     };
 

@@ -8,6 +8,30 @@ import { useMaloti } from "@/context/MalotiContext";
 export default function GlobalModals() {
     const { innerCircleOpen, setInnerCircleOpen } = useMaloti();
 
+    const [memberKey, setMemberKey] = React.useState("");
+    const [loading, setLoading] = React.useState(false);
+
+    const handleSync = async () => {
+        if (!memberKey) return;
+        setLoading(true);
+        try {
+            // Check MP-FIN-01. Mocking auth logic with anonymous for simplicity if needed
+            // Here we attempt to sign in or just save to state
+            // Let's dynamically import to avoid SSR issues if used in Next.js
+            const { auth } = await import("@/lib/firebase");
+            const { signInAnonymously, updateProfile } = await import("firebase/auth");
+
+            const cred = await signInAnonymously(auth);
+            await updateProfile(cred.user, { displayName: `Member-${memberKey.slice(0, 4)}` });
+
+            setInnerCircleOpen(false);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <AnimatePresence>
             {innerCircleOpen && (
@@ -41,23 +65,34 @@ export default function GlobalModals() {
                                 <div className="relative">
                                     <input
                                         type="text"
-                                        placeholder="ENTER MEMBER KEY"
+                                        placeholder="ENTER MEMBER KEY / EMAIL"
+                                        value={memberKey}
+                                        onChange={(e) => setMemberKey(e.target.value)}
                                         className="w-full bg-black/40 border border-[#FF8C00]/20 rounded-lg py-4 px-4 text-center text-white placeholder:text-white/20 focus:outline-none focus:border-[#FF8C00] tracking-[0.5em] font-bold text-sm"
                                     />
                                 </div>
                                 <button
-                                    className="w-full bg-[#FF8C00] text-black font-black uppercase py-4 rounded-lg tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-lg"
-                                    onClick={() => setInnerCircleOpen(false)}
+                                    onClick={handleSync}
+                                    disabled={loading}
+                                    className="w-full bg-[#FF8C00] text-black font-black uppercase py-4 rounded-lg tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-lg disabled:opacity-50"
                                 >
-                                    IDENTITY SYNC
+                                    {loading ? "SYNCING..." : "IDENTITY SYNC"}
                                 </button>
                             </div>
 
                             <button
                                 className="mt-8 text-[10px] text-[#cbb290] uppercase tracking-widest hover:text-white transition-colors"
-                                onClick={() => setInnerCircleOpen(false)}
+                                onClick={async () => {
+                                    /* trigger popup */
+                                    try {
+                                        const { auth } = await import("@/lib/firebase");
+                                        const { signInWithPopup, GoogleAuthProvider } = await import("firebase/auth");
+                                        await signInWithPopup(auth, new GoogleAuthProvider());
+                                        setInnerCircleOpen(false);
+                                    } catch (e) { console.error(e) }
+                                }}
                             >
-                                [ Request Access Key ]
+                                [ Request Access via Google ]
                             </button>
                         </div>
 
